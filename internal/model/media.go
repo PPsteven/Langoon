@@ -13,7 +13,7 @@ const (
 type Media struct {
 	MID           uint      `json:"mid" gorm:"primaryKey;column:mid"`
 	Url           string    `json:"url"`
-	TranscriptUrl string    `json:"transcriptUrl"`
+	TranscriptUrl string    `json:"transcript_url"`
 	Title         string    `json:"title"`
 	CoverImg      string    `json:"cover_img"`
 	Des           string    `json:"des"`
@@ -35,6 +35,6 @@ type Line struct {
 	ID          int    `json:"id"`
 	Raw         string `json:"raw"`
 	Translation string `json:"translation"`
-	Start       int    `json:"start"`
-	End         int    `json:"end"`
+	Start       int64  `json:"start"`
+	End         int64  `json:"end"`
 }
