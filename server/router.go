@@ -13,6 +13,7 @@ func Init(e *gin.Engine) {
 			api.GET("/user/:id", handlers.GetUserByID)
 			api.POST("/translate", handlers.PostTranslate)
 			api.GET("/media/:id", handlers.GetMedia)
+			api.POST("/media", handlers.PostMedia)
 		}
 	}
 }
