@@ -14,6 +14,7 @@ type Resp[T any] struct {
 const (
 	ERROR   = 7
 	SUCCESS = 0
+    InternalErr = "internal error"
 )
 
 func resp(c *gin.Context, code int, msg string, data interface{}) {

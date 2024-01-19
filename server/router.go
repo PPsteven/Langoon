@@ -11,6 +11,7 @@ func Init(e *gin.Engine) {
 		api := e.Group("/api")
 		{
 			api.GET("/user/:id", handlers.GetUserByID)
+			api.POST("/translate", handlers.PostTranslate)
 		}
 	}
 }
