@@ -1,6 +1,7 @@
 package db
 
 import (
+	"encoding/json"
 	"go-server-template/internal/model"
 )
 
@@ -10,6 +11,7 @@ func GetMediaByMID(mid uint) (media *model.Media, err error) {
 	if err != nil {
 		return nil, err
 	}
+	_ = json.Unmarshal([]byte(media.Transcript.Content), &media.Transcript.Lines)
 	return media, nil
 }
 

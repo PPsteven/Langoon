@@ -27,8 +27,8 @@ type Transcript struct {
 	MID            uint         `json:"mid" gorm:"primaryKey;column:mid"`
 	SourceLangCode LanguageCode `json:"source_lang_code"`
 	TargetLangCode LanguageCode `json:"target_lang_code"`
-	Content        string       `json:"content" gorm:"type:longtext"`
-	Lines          []Line       `json:"lines" gorm:"-"`
+	Content        string       `json:"-" gorm:"type:longtext"`
+	Lines          []*Line      `json:"lines" gorm:"-"`
 }
 
 type Line struct {
