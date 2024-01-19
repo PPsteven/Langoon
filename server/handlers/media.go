@@ -10,9 +10,6 @@ import (
 	"strconv"
 )
 
-type GetMediaResp struct {
-
-}
 
 func GetMedia(c *gin.Context) {
 	MID, err := strconv.ParseUint(c.Param("id"), 10, 64)
