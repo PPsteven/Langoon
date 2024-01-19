@@ -73,7 +73,7 @@ func InitDB() {
 }
 
 func registerTables() {
-	err := AutoMigrate(new(model.User))
+	err := AutoMigrate(new(model.User), new(model.Media), new(model.Transcript))
 	if err != nil {
 		log.Fatalf("failed migrate database: %s", err.Error())
 	}
