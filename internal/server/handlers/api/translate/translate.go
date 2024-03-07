@@ -1,12 +1,28 @@
-package handlers
+package translate
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"go-server-template/internal/model"
+	"go-server-template/internal/server/errcode"
+	"go-server-template/internal/server/response"
+	"go-server-template/internal/service"
 	"go-server-template/internal/translator"
-	"go-server-template/server/common"
 )
+
+var _ Handler = (*handler)(nil)
+
+type Handler interface {
+	Translate(c *gin.Context)
+
+	i()
+}
+
+type handler struct {
+}
+
+func New(s service.Service) Handler {
+	return &handler{}
+}
 
 type TranslateReq struct {
 	SourceLangCode model.LanguageCode `json:"source_lang_code"`
@@ -18,28 +34,30 @@ type TranslateResp struct {
 	Texts []string `json:"texts"`
 }
 
-func PostTranslate(c *gin.Context) {
+func (h *handler) Translate(c *gin.Context) {
 	var req TranslateReq
 	if err := c.ShouldBindJSON(&req); err != nil {
-		common.ErrorResp(c, err.Error())
+		response.Error(c, errcode.ErrParams)
 		return
 	}
+
 	if len(req.Texts) == 0 {
-		common.ErrorResp(c, "empty text")
+		response.Error(c, errcode.ErrParams.WithDetail("empty text"))
 		return
 	}
+
 	e := translator.New().SetLang(req.SourceLangCode, req.TargetLangCode)
 	var tranlates []string
 	for _, text := range req.Texts {
 		transText, err := e.Translate(text)
 		if err != nil {
-			logrus.Errorf("translate err, source lang %s, target lang %s, err %v", req.SourceLangCode, req.TargetLangCode, err)
-			common.ErrorResp(c, common.InternalErr)
+			response.Error(c, errcode.ErrTranslateFailed.WithDetail("source lang %s, target lang %s, err %v", req.SourceLangCode, req.TargetLangCode, err))
 			return
 		}
 		tranlates = append(tranlates, transText)
 	}
-	common.SuccessResp(c, &TranslateResp{
-		Texts: tranlates,
-	})
+
+	response.Success(c, &TranslateResp{Texts: tranlates})
 }
+
+func (h *handler) i() {}

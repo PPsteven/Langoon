@@ -1,9 +1,15 @@
 package bootstrap
 
-import "go-server-template/pkg/http"
+import (
+	"go-server-template/internal/db"
+	"go-server-template/internal/service"
+	"go-server-template/pkg/http"
+)
 
 func Init() {
-	InitDB()
 	InitLog()
+	InitDB()
+
 	http.InitClient()
+	service.Init(db.GetDB())
 }
