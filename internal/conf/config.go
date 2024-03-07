@@ -1,6 +1,9 @@
 package conf
 
-import "path/filepath"
+import (
+	"path/filepath"
+	"time"
+)
 
 type EnvMode string
 
@@ -13,6 +16,7 @@ type Config struct {
 	Database Database `json:"database"`
 	Logger   Logger   `json:"logger"`
 	Env      EnvMode  `json:"env"`
+	JWT      JWT      `json:"jwt"`
 	Port     int      `json:"port"`
 }
 
@@ -35,12 +39,18 @@ type LogFile struct {
 	MaxSize    int    `json:"max_size" env:"MAX_SIZE"`
 	MaxBackups int    `json:"max_backups" env:"MAX_BACKUPS"`
 	MaxAge     int    `json:"max_age" env:"MAX_AGE"`
+	LocalTime  bool   `json:"local_time" env:"LOCAL_TIME"`
 	Compress   bool   `json:"compress" env:"COMPRESS"`
 }
 
 type Logger struct {
 	LogLevel string  `json:"log_level"`
 	LogFile  LogFile `json:"file"`
+}
+
+type JWT struct {
+	Secret string `json:"secret"`
+	Expire int64  `json:"expire"`
 }
 
 var Conf *Config
@@ -56,14 +66,20 @@ func InitDefaultConfig() *Config {
 		},
 		Logger: Logger{
 			LogLevel: "debug",
+
 			LogFile: LogFile{
 				Enable:     true,
-				Name:       logPath,
-				MaxSize:    10,
-				MaxBackups: 5,
-				MaxAge:     28,
-				Compress:   false,
+				Name:       logPath, // 文件路径
+				MaxSize:    128,     // 单个文件最大尺寸，默认单位 M
+				MaxBackups: 300,     // 最多保留 300 个备份
+				MaxAge:     30,      // 最大时间，默认单位 day
+				LocalTime:  true,    // 使用本地时间
+				Compress:   false,   // 是否压缩 disabled by default
 			},
+		},
+		JWT: JWT{
+			Secret: "your_secret_key",
+			Expire: int64((time.Hour * 24 * 7).Seconds()), // 7 days
 		},
 		Env: Dev,
 	}

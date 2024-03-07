@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type SubConvertor struct{
+type SubConvertor struct {
 	ConvertorData
 }
 

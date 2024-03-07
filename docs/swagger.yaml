@@ -1,0 +1,42 @@
+definitions:
+  model.User:
+    properties:
+      id:
+        example: 1
+        type: integer
+      password:
+        example: xxxxxxx
+        type: string
+      username:
+        example: JohnDoe
+        type: string
+    required:
+    - username
+    type: object
+info:
+  contact: {}
+paths:
+  /api/user/{id}:
+    get:
+      consumes:
+      - application/x-www-form-urlencoded
+      description: 获取用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: ""
+      summary: 获取用户
+      tags:
+      - API.user
+swagger: "2.0"

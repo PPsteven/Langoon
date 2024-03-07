@@ -9,13 +9,17 @@ database:
     sslmode: ""
     dsn: ""
 env: dev
+jwt:
+    secret: your_secret_key
+    expire: 604800
 logger:
     loglevel: debug
     logfile:
         enable: true
         name: log/default.log
-        maxsize: 10
-        maxbackups: 5
-        maxage: 28
+        maxsize: 128
+        maxbackups: 300
+        maxage: 30
+        localtime: true
         compress: false
 port: 3000
