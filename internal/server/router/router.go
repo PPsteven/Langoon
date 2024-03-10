@@ -16,6 +16,12 @@ func Load(e *gin.Engine, middlewares ...gin.HandlerFunc) {
 			api.POST("/translate", handlers.Translate().Translate)
 			//api.GET("/media/:id", handlers.GetMedia)
 			//api.POST("/media", handlers.PostMedia)
+
+			nlp := api.Group("/nlp")
+			{
+				nlp.POST("/sentences", handlers.NLP().GetSentences)
+				nlp.POST("/tokenize", handlers.NLP().Tokenize)
+			}
 		}
 	}
 }

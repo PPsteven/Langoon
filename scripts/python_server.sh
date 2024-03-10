@@ -1,0 +1,1 @@
+cd ../tools/nlp && uvicorn server:app --reload
