@@ -3,6 +3,8 @@ import json
 import spacy
 from typing import List
 
+# install model
+# python -m spacy download en_core_web_sm
 lang2mode = {
     "en": "en_core_web_sm",
     "zh-CN": "zh_core_web_sm",
@@ -17,6 +19,8 @@ class Nlp(object):
         model = lang2mode.get(lang)
         if model:
             self.nlp = spacy.load(model)
+        else:
+            raise Exception(f"Unsupported language: {lang}")
 
     def load_text(self, text: str):
         self.doc = self.nlp(text)
