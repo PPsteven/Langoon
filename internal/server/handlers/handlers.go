@@ -4,6 +4,7 @@ import (
 	"go-server-template/internal/server/handlers/api/nlp"
 	"go-server-template/internal/server/handlers/api/translate"
 	"go-server-template/internal/server/handlers/api/user"
+	"go-server-template/internal/server/handlers/api/word"
 	"go-server-template/internal/service"
 )
 
@@ -17,4 +18,8 @@ func Translate() translate.Handler {
 
 func NLP() nlp.Handler {
 	return nlp.New(service.Get())
+}
+
+func Word() word.Handler {
+	return word.New(service.Get())
 }
