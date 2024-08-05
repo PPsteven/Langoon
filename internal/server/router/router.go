@@ -15,8 +15,6 @@ func Load(e *gin.Engine, middlewares ...gin.HandlerFunc) {
 			api.GET("/user/:id", middleware.Alias("/user/:id"), handlers.User().GetUser)
 			api.POST("/translate", handlers.Translate().Translate)
 			api.POST("/word/:word", handlers.Word().GetWord)
-			//api.GET("/media/:id", handlers.GetMedia)
-			//api.POST("/media", handlers.PostMedia)
 
 			nlp := api.Group("/nlp")
 			{

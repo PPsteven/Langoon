@@ -44,7 +44,7 @@ func RunServer() {
 
 	var g errgroup.Group
 	httpServer := &http.Server{
-		Addr:    fmt.Sprintf("%s:%d", "localhost", conf.Conf.Port),
+		Addr:    fmt.Sprintf("%s:%d", "0.0.0.0", conf.Conf.Port),
 		Handler: mux,
 	}
 

@@ -7,6 +7,7 @@ from typing import List
 # python -m spacy download en_core_web_sm
 lang2mode = {
     "en": "en_core_web_sm",
+    "jp": "ja_core_news_sm",
     "zh-CN": "zh_core_web_sm",
 }
 
