@@ -1,0 +1,8 @@
+.line .btn {
+    visibility: hidden;
+    background-color: var(--b2);
+}
+
+.line:hover .btn {
+    visibility: visible;
+}

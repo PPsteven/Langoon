@@ -1,0 +1,8 @@
+.slider:hover .slider-track {
+    height: 6px;
+}
+
+.slider:hover .slider-thumb {
+    height: 16px;
+    width: 16px;
+}
