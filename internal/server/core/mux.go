@@ -7,6 +7,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go-server-template/internal/conf"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -88,7 +89,8 @@ func NewMux(options ...Option) (mux *gin.Engine, err error) {
 	if conf.Conf.Env == conf.Production {
 		gin.SetMode(gin.ReleaseMode)
 	}
-	//mux.StaticFS("assets", http.FS(assets.Bootstrap))
+	fsys := os.DirFS("assets")
+	mux.StaticFS("assets", http.FS(fsys))
 	//mux.SetHTMLTemplate(template.Must(template.New("").ParseFS(assets.Templates, "templates/**/*")))
 
 	opt := new(option)
