@@ -22,7 +22,7 @@ func init() {
 	RootCmd.AddCommand(serverCmd)
 
 	// Here you will define your flags and configuration settings.
-	viper.SetDefault("port", 3000)
+	viper.SetDefault("port", 5266)
 	viper.SetDefault("env", "dev")
 
 	// Cobra supports Persistent Flags which will work for this command
