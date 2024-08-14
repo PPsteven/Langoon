@@ -1,4 +1,4 @@
-import { TokenResp, WordDictResp } from "@/types/nlp";
+import { TokenResp, TranslateResp, WordDictResp } from "@/types/nlp";
 
 import { r } from "@/utils/requests";
 
@@ -9,6 +9,14 @@ export const getTokenize = (
   return r.post("/nlp/tokenize", {
     source_lang_code: langCode,
     text: texts,
+  });
+};
+
+export const getTranlation = (texts: string[]): Promise<TranslateResp> => {
+  return r.post("/translate", {
+    source_lang_code: "ja",
+    target_lang_code: "zh-CN",
+    texts: texts,
   });
 };
 

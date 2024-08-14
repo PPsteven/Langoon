@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "text": "あの巨大な建物は何ですか？",
+    "translation": "那座巨大的建筑是什么？",
+    "isSelected": false,
+    "start": 0,
+    "end": 100,
+    "tokens": [
+      {
+        "text": "あの",
+        "pos": "DET",
+        "whitespace": " "
+      },
+      {
+        "text": "巨大",
+        "pos": "ADJ",
+        "whitespace": "な"
+      },
+      {
+        "text": "な",
+        "pos": "AUX",
+        "whitespace": " "
+      },
+      {
+        "text": "建物",
+        "pos": "NOUN",
+        "whitespace": "は"
+      },
+      {
+        "text": "何",
+        "pos": "PRON",
+        "whitespace": "です"
+      },
+      {
+        "text": "か",
+        "pos": "AUX",
+        "whitespace": "？"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "text": "あの巨大な建物は何ですか？",
+    "translation": "那座巨大的建筑是什么？",
+    "isSelected": false,
+    "start": 0,
+    "end": 100,
+    "tokens": [
+      {
+        "text": "あの",
+        "pos": "DET",
+        "whitespace": " "
+      },
+      {
+        "text": "巨大",
+        "pos": "ADJ",
+        "whitespace": "な"
+      },
+      {
+        "text": "な",
+        "pos": "AUX",
+        "whitespace": " "
+      },
+      {
+        "text": "建物",
+        "pos": "NOUN",
+        "whitespace": "は"
+      },
+      {
+        "text": "何",
+        "pos": "PRON",
+        "whitespace": "です"
+      },
+      {
+        "text": "か",
+        "pos": "AUX",
+        "whitespace": "？"
+      }
+    ]
+  }
+]

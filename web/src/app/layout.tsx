@@ -3,13 +3,14 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { type ThemeProviderProps } from "next-themes/dist/types"
+import { type ThemeProviderProps } from "next-themes/dist/types";
+import classNames from "classnames";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Text Book",
-  description: "A simple text book to learn languages",
+  title: "100LS",
+  description: "100 days to learn a new language",
 };
 
 export default function RootLayout({
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-      <body className={inter.className}>{children}</body>
+      <body className={classNames(inter.className, "bg-background")}>
+        {children}
+      </body>
     </html>
   );
 }

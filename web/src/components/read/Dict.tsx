@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import classNames from "classnames";
-import { X as CloseIcon, Check, BellRing, Search } from "lucide-react";
+import { X as CloseIcon, Check, BellRing, Search, Volume2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -13,6 +13,7 @@ import { getWord } from "@/utils/api";
 import { WordDict } from "@/types/nlp";
 import { PlayerContext } from "@/store";
 import { handleRespWithNotifySuccess } from "@/utils/handle_resp";
+import usePronunciationSound from "@/hooks/usePronunciation";
 
 interface DictItemProps {
   label: string;
@@ -26,22 +27,20 @@ const DictItem = ({ label, texts }: DictItemProps) => {
   return (
     <div>
       <div className="mt-4 mb-2 font-bold">{label}</div>
-      {
-        texts.map((text, index) => (
-          <div
-            key={index}
-            className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-          >
-            <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-            <div className="space-y-1">
-              <p className="text-sm font-medium leading-none">{text}</p>
-              {/* <p className="text-sm text-muted-foreground">
+      {texts.map((text, index) => (
+        <div
+          key={index}
+          className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+        >
+          <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+          <div className="space-y-1">
+            <p className="text-sm font-medium leading-none">{text}</p>
+            {/* <p className="text-sm text-muted-foreground">
                 {notification.description}
               </p> */}
-            </div>
           </div>
-        ))
-      }
+        </div>
+      ))}
     </div>
   );
 };
@@ -49,14 +48,19 @@ export const Dict = () => {
   const [open, setOpen] = useState(false);
   const [wordDict, setWordDict] = useState<WordDict>();
   const { searchWord, searchSent } = useContext(PlayerContext);
+  const { play, stop, isPlaying } = usePronunciationSound(searchWord, true);
 
   const close = () => {
     setOpen(false);
   };
 
+  const playWord = () => {
+    stop();
+    play();
+  };
+
   useEffect(() => {
     searchWord && setOpen(true);
-    getWord;
   }, [searchWord]);
 
   useEffect(() => {
@@ -84,7 +88,12 @@ export const Dict = () => {
         <Card className={"w-full"}>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>{searchWord}</CardTitle>
+              <div className="div flex space-x-1">
+                <CardTitle>{searchWord}</CardTitle>
+                <button onClick={playWord}>
+                  <Volume2 />
+                </button>
+              </div>
               <button
                 className="border-2 border-gray-300 rounded-sm"
                 onClick={close}
@@ -109,7 +118,10 @@ export const Dict = () => {
                 label={"词的原始含义"}
                 texts={[wordDict?.original || ""]}
               />
-              <DictItem label={"词的上下文含义"} texts={[wordDict?.meaning || ""]} />
+              <DictItem
+                label={"词的上下文含义"}
+                texts={[wordDict?.meaning || ""]}
+              />
               <DictItem label={"解释"} texts={[wordDict?.explain || ""]} />
               <DictItem label={"词性"} texts={[wordDict?.class || ""]} />
               <DictItem label={"例句"} texts={wordDict?.examples || []} />
