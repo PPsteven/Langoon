@@ -17,6 +17,8 @@
     "class-variance-authority": "^0.7.0",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "dexie": "^4.0.8",
+    "dexie-react-hooks": "^1.1.7",
     "howler": "^2.2.4",
     "jotai": "^2.9.2",
     "lucide-react": "^0.424.0",
@@ -25,6 +27,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-resizable-panels": "^2.0.23",
+    "swr": "^2.2.5",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
     "use-sound": "^4.0.3"

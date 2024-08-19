@@ -12,8 +12,6 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { MoreVertical } from "lucide-react";
 import { useContext } from "react";
 
-
-
 interface WordProps {
   token: Token;
 }

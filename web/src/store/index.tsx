@@ -17,7 +17,7 @@ export const PlayerContext = createContext<{
   setSearchSent: (value: string) => void;
 }>({} as any);
 
-const urls = ["https://lang.majutsushi.world/assets/spirited_away_jp.mp3"];
+const urls = ["http://pp:5266/assets/spirited_away_jp.mp3"];
 
 export const PlayerContextProvider = (props: any) => {
   // 当前句子列表
@@ -49,27 +49,8 @@ export const PlayerContextProvider = (props: any) => {
 
 export const isOpenTranslationAtom = atomWithStorage("isOpenTranslation", true);
 export const curTargetLangAtom = atomWithStorage("curTargetLang", "jp");
+export const curAudioIdAtom = atomWithStorage("curAudioId", 1);
 
-import demoSubtitles from "@/assets/spirited_away_jp_cn.json";
-
-export const sentencesInitData = () => {
-  return demoSubtitles
-    .filter((line) => line.text.trim() !== "")
-    .map((line, id) => {
-      return {
-        ...line,
-        text: line.text.trim(),
-        id: parseInt(line.id, 10),
-        start: line.start,
-        end: line.end,
-        isSelected: false,
-      } as Sent;
-    });
-};
-
-export const sentencesAtom = atomWithStorage(
-  "sentences",
-  sentencesInitData() as Sent[]
-);
+export const sentencesAtom = atom<Sent[]>([]);
 
 export const curSentenceIdAtom = atom(-1);

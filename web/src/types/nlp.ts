@@ -31,6 +31,7 @@ export interface Sent {
   isSelected: boolean;
   start: number;
   end: number;
+  isTokenized: boolean;
   tokens?: Token[];
 }
 

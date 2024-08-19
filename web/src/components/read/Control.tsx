@@ -14,7 +14,11 @@ import { useAtom, useAtomValue } from "jotai";
 import { setDefaultAutoSelectFamilyAttemptTimeout } from "net";
 
 const Buttons = () => {
-  const { sound: player, exposedData: state } = useContext(PlayerContext)!;
+  const {
+    sound: player,
+    seek,
+    exposedData: state,
+  } = useContext(PlayerContext)!;
 
   const [curSentenceId] = useAtom(curSentenceIdAtom);
   const sentences = useAtomValue(sentencesAtom);
@@ -35,7 +39,7 @@ const Buttons = () => {
     if (curIndex >= sentences.length) {
       curIndex = sentences.length - 1;
     }
-    player.seek(sentences[curIndex].start);
+    seek(sentences[curIndex].start);
   };
 
   return (

@@ -4,7 +4,7 @@ import { Sentence } from "../Sentence";
 
 const SentencePanel = () => {
   const [curSentenceId, setCurSentenceId] = useAtom(curSentenceIdAtom);
-  const [sentences, setSentences] = useAtom(sentencesAtom);
+  const [sentences] = useAtom(sentencesAtom);
 
   if (sentences.length === 0 || curSentenceId === -1) {
     return <div className="div">Loading...</div>;
