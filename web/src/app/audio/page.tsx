@@ -2,7 +2,6 @@
 
 import type React from "react";
 import dynamic from "next/dynamic";
-import { Dict } from "@/components/read/Dict";
 import {
   ResizableHandle,
   ResizablePanel,

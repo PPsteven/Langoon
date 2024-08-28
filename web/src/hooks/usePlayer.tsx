@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Howl } from "howler";
+import { HowlOptions } from "howler";
 import { addHowlListener } from "@/utils";
 
 export interface PlayerProps {
@@ -16,7 +16,10 @@ export type State = {
   err?: string; // 错误信息
 };
 
-export default function usePlayer(urls: string[]) {
+export default function usePlayer(
+  urls: string | string[],
+  sprite?: HowlOptions["sprite"]
+) {
   const [state, setState] = useState<State>({
     seek: 0,
     duration: 0,
@@ -44,6 +47,7 @@ export default function usePlayer(urls: string[]) {
     if (!soundRef.current) {
       soundRef.current = new Howl({
         src: urls,
+        sprite: sprite,
         html5: true,
         preload: true, // Donwload file to improve performance true
       });

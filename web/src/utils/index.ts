@@ -1,4 +1,4 @@
-import { Token } from "@/types/nlp";
+import { Token } from "@/types";
 
 export function addHowlListener(howl: Howl, ...args: Parameters<Howl["on"]>) {
   howl.on(...args);

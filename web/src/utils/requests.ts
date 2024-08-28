@@ -3,8 +3,8 @@
 import axios from "axios";
 import { log as debugLog } from "./log";
 
-const host = "https://lang.majutsushi.world"
-// const host = "http://127.0.0.1:5266";
+const host = "https://lang.majutsushi.world";
+// const host = "http://pp:5266";
 
 // Import axios module for HTTP requests and log function from the current directory index file.
 const instance = axios.create({

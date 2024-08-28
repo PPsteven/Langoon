@@ -1,5 +1,5 @@
 import Dexie, { type EntityTable } from "dexie";
-import { Sent } from "@/types/nlp";
+import { Sent } from "@/types";
 
 const db = new Dexie("audio") as Dexie & {
   sents: EntityTable<

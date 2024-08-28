@@ -5,29 +5,26 @@ import {
   RedoDotIcon as ForwardIcon,
 } from "lucide-react";
 
+import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { formatTime } from "../../utils/helper";
 import { useContext, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { curSentenceIdAtom, PlayerContext, sentencesAtom } from "@/store";
+import { curSentenceIdAtom, AudioContext, sentencesAtom } from "@/store";
 import { useAtom, useAtomValue } from "jotai";
-import { setDefaultAutoSelectFamilyAttemptTimeout } from "net";
 
 const Buttons = () => {
-  const {
-    sound: player,
-    seek,
-    exposedData: state,
-  } = useContext(PlayerContext)!;
+  const { state, dispatch, player } = useContext(AudioContext)!;
 
   const [curSentenceId] = useAtom(curSentenceIdAtom);
   const sentences = useAtomValue(sentencesAtom);
 
-  const playMedia = () => {
+  const playAndPause = () => {
+    console.log("playAndPause", state, player);
     if (state.status === "play") {
-      player.pause();
+      player?.pause();
     } else if (state.status === "pause") {
-      player.play();
+      player?.play();
     }
   };
 
@@ -39,7 +36,7 @@ const Buttons = () => {
     if (curIndex >= sentences.length) {
       curIndex = sentences.length - 1;
     }
-    seek(sentences[curIndex].start);
+    player?.seek(sentences[curIndex].start);
   };
 
   return (
@@ -47,7 +44,7 @@ const Buttons = () => {
       <Button size="icon" onClick={() => switchNextSentence(true)}>
         <BackwardIcon size={24} />
       </Button>
-      <Button size="icon" onClick={playMedia}>
+      <Button size="icon" onClick={playAndPause}>
         {state.status == "play" ? (
           <PauseIcon size={32} />
         ) : (
@@ -62,10 +59,10 @@ const Buttons = () => {
 };
 
 const ProgressBar = () => {
-  const { sound, seek, exposedData: state } = useContext(PlayerContext)!;
+  const { state, dispatch, player } = useContext(AudioContext)!;
 
   const onChange = (val: number) => {
-    seek((val / 100) * state.duration);
+    player?.seek((val / 100) * state.duration);
   };
 
   const [isDragging, setIsDragging] = useState(false);

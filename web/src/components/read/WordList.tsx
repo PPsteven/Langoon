@@ -6,7 +6,7 @@ import { use, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Volume2 } from "lucide-react";
 import usePronunciationSound from "@/hooks/usePronunciation";
-import { Token } from "@/types/nlp";
+import { Token } from "@/types";
 import { handleRespWithNotifySuccess } from "@/utils/handle_resp";
 import { getTranlation } from "@/utils/api";
 import { isWord } from "@/utils";

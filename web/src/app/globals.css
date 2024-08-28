@@ -82,3 +82,7 @@
 .bg-test {
   background-color: #44f631;
 }
+
+body {
+  overflow: hidden;
+}

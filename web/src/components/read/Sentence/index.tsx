@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import {
   curSentenceIdAtom,
   isOpenTranslationAtom,
-  PlayerContext,
+  AudioContext,
 } from "@/store";
-import { Sent, Token } from "@/types/nlp";
+import { Sent, Token } from "@/types";
 import { isWord } from "@/utils";
 import classNames from "classnames";
 import { useAtomValue, useSetAtom } from "jotai";
@@ -99,10 +99,10 @@ export const Sentence = ({
 };
 
 export const SentenceButton = ({ isActive, data }: SentenceProps) => {
-  const { sound, setSearchWord, setSearchSent } = useContext(PlayerContext)!;
+  const { state, player } = useContext(AudioContext)!;
 
   const skipToLine = () => {
-    sound.seek(data.start);
+    player?.seek(data.start);
   };
 
   return (

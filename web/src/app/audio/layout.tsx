@@ -5,8 +5,7 @@ import {
 } from "@/components/ui/resizable";
 
 import { Provider } from "jotai";
-import { PlayerContextProvider } from "@/store";
-import { WordList } from "@/components/read/WordList";
+import { AudioContextProvider } from "@/store";
 
 export default function AudioLayout({
   children,
@@ -15,9 +14,9 @@ export default function AudioLayout({
 }>) {
   return (
     <Provider>
-      <PlayerContextProvider>
+      <AudioContextProvider>
         <section className="w-screen h-screen">{children}</section>
-      </PlayerContextProvider>
+      </AudioContextProvider>
     </Provider>
   );
 }

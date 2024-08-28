@@ -1,4 +1,4 @@
-import { TokenResp, TranslateResp, WordDictResp } from "@/types/nlp";
+import { TokenResp, TranslateResp, WordDictResp } from "@/types";
 
 import { r } from "@/utils/requests";
 

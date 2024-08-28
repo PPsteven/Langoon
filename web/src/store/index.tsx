@@ -1,56 +1,71 @@
 "use client";
 
 import { createContext, useState } from "react";
-import type { State } from "@/hooks/usePlayer";
-import type { Sent } from "@/types/nlp";
-import usePlayer from "@/hooks/usePlayer";
+import type { Sent } from "@/types";
+import type { AudioState, AudioOptions } from "@/lib/audio";
+import { AudioPlayer } from "@/lib/audio";
 import { atomWithStorage } from "jotai/utils";
 import { atom } from "jotai";
+import { useImmerReducer } from "use-immer";
 
-export const PlayerContext = createContext<{
-  sound: Howl;
-  seek: (seek: number, id?: number) => void;
-  exposedData: State;
-  searchWord: string;
-  setSearchWord: (value: string) => void;
-  searchSent: string;
-  setSearchSent: (value: string) => void;
-}>({} as any);
+// audio
+export type AudioAction =
+  | { type: "load"; payload: { duration: number } }
+  | { type: "play" }
+  | { type: "pause" }
+  | { type: "next" }
+  | { type: "pre" }
+  | { type: "seek"; payload: number };
 
-const urls = ["http://pp:5266/assets/spirited_away_jp.mp3"];
+export type Dispatch = (action: AudioAction) => void;
 
-export const PlayerContextProvider = (props: any) => {
-  // 当前句子列表
-  const [sentences, setSentences] = useState<Sent[]>([]);
-  // 当前搜索的单词
-  const [searchWord, setSearchWord] = useState("");
-  // 当前搜索的句子
-  const [searchSent, setSearchSent] = useState("");
+export const AudioContext = createContext<{
+  state: AudioState;
+  dispatch: Dispatch;
+  player: AudioPlayer | null;
+  setPlayer: (player: AudioPlayer) => void;
+} | null>(null);
 
+export const AudioReducer = (draft: AudioState, action: AudioAction) => {
+  switch (action.type) {
+    case "load":
+      draft.duration = action.payload.duration;
+      draft.status = "pause";
+      break;
+    case "play":
+      draft.status = "play";
+      break;
+    case "pause":
+      draft.status = "pause";
+      break;
+    case "seek":
+      draft.status = "play";
+      draft.seek = action.payload;
+      draft.percent = draft.percent / draft.duration;
+      break;
+  }
+};
+
+export const AudioContextProvider = (props: any) => {
   const { children = null } = props;
-  const { sound, seek, exposedData } = usePlayer(urls);
+  const [state, dispatch] = useImmerReducer(AudioReducer, {
+    seek: 0,
+    duration: 0,
+    percent: 0,
+    status: "loading",
+  } as AudioState);
+  const [player, setPlayer] = useState<AudioPlayer | null>(null);
 
   return (
-    <PlayerContext.Provider
-      value={{
-        sound: sound,
-        seek: seek,
-        exposedData: exposedData,
-        searchWord,
-        setSearchWord,
-        searchSent,
-        setSearchSent,
-      }}
-    >
+    <AudioContext.Provider value={{ state, dispatch, player, setPlayer }}>
       {children}
-    </PlayerContext.Provider>
+    </AudioContext.Provider>
   );
 };
 
+// config
 export const isOpenTranslationAtom = atomWithStorage("isOpenTranslation", true);
 export const curTargetLangAtom = atomWithStorage("curTargetLang", "jp");
 export const curAudioIdAtom = atomWithStorage("curAudioId", 1);
-
 export const sentencesAtom = atom<Sent[]>([]);
-
 export const curSentenceIdAtom = atom(-1);
