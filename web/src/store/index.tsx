@@ -1,12 +1,14 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { Sent } from "@/types";
 import type { AudioState, AudioOptions } from "@/lib/audio";
 import { AudioPlayer } from "@/lib/audio";
 import { atomWithStorage } from "jotai/utils";
 import { atom } from "jotai";
 import { useImmerReducer } from "use-immer";
+import Kuroshiro from "@sglkc/kuroshiro";
+import KuromojiAnalyzer from "@sglkc/kuroshiro-analyzer-kuromoji";
 
 // audio
 export type AudioAction =
@@ -24,6 +26,7 @@ export const AudioContext = createContext<{
   dispatch: Dispatch;
   player: AudioPlayer | null;
   setPlayer: (player: AudioPlayer) => void;
+  kuroshiro: Kuroshiro | null;
 } | null>(null);
 
 export const AudioReducer = (draft: AudioState, action: AudioAction) => {
@@ -55,9 +58,21 @@ export const AudioContextProvider = (props: any) => {
     status: "loading",
   } as AudioState);
   const [player, setPlayer] = useState<AudioPlayer | null>(null);
+  const [kuroshiro, setKuroshiro] = useState<Kuroshiro | null>(null);
+
+  useEffect(() => {
+    const initKuroshiro = async () => {
+      const kuroshiro = new Kuroshiro();
+      await kuroshiro.init(new KuromojiAnalyzer());
+      setKuroshiro(kuroshiro);
+    };
+    initKuroshiro();
+  }, []);
 
   return (
-    <AudioContext.Provider value={{ state, dispatch, player, setPlayer }}>
+    <AudioContext.Provider
+      value={{ state, dispatch, player, setPlayer, kuroshiro }}
+    >
       {children}
     </AudioContext.Provider>
   );

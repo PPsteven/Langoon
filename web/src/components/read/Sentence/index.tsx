@@ -10,25 +10,49 @@ import { isWord } from "@/utils";
 import classNames from "classnames";
 import { useAtomValue, useSetAtom } from "jotai";
 import { MoreVertical } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 
 interface WordProps {
   token: Token;
+  isLarge: boolean;
 }
 
-const Word = ({ token }: WordProps) => {
+const wordSize = {
+  small: ["text-[10px] leading-[12px]", "text-xs", "text-sm"],
+  large: ["text-base", "text-2xl", "text-3xl"],
+};
+
+const Word = ({ token, isLarge: isHuge }: WordProps) => {
+  const { kuroshiro } = useContext(AudioContext)!;
+  const [hiragana, setHiragana] = useState("");
+  const [size1, size2, size3] = isHuge ? wordSize.large : wordSize.small;
+
+  useEffect(() => {
+    const handleKanji = async () => {
+      if (kuroshiro?.Util.hasKanji(token.text)) {
+        const result =
+          (await kuroshiro?.convert(token.text, { to: "hiragana" })) || "";
+        setHiragana(result);
+      }
+    };
+    handleKanji();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token.text]);
+
   return (
     <div className="font-sans">
       {isWord(token) ? (
         <button>
-          <span
+          <div
             className={classNames(
+              "flex flex-col",
               "box-border border border-transparent rounded cursor-pointer",
               "hover:bg-orange-300"
             )}
           >
-            {token.text}
-          </span>
+            {hiragana && <span className={size1}>{hiragana}</span>}
+            <span className={size3}>{token.text}</span>
+          </div>
         </button>
       ) : (
         <span>{token.text}</span>
@@ -47,29 +71,28 @@ interface SentenceProps {
 export const Sentence = ({
   isActive,
   data,
-  isHuge,
+  isHuge: isLarge = false,
   className,
 }: SentenceProps) => {
   const isOpenTranslation = useAtomValue(isOpenTranslationAtom);
 
-  const size1 = isHuge ? "text-3xl" : "text-base";
-  const size2 = isHuge ? "text-2xl" : "text-sm";
+  const [size1, size2, size3] = isLarge ? wordSize.large : wordSize.small;
 
   return (
-    <div className={classNames("pl-4 pr-2 text-start", className)}>
-      <div className="flex flex-col">
+    <div className={classNames("text-start", className)}>
+      <div className="flex flex-col text-xl">
         {data.tokens ? (
           <div
-            id={"line" + data.id}
+            id={"line_" + data.id}
             className={classNames(
-              "font-bold whitespace-pre flex flex-wrap",
-              size1
+              "font-bold whitespace-pre flex flex-wrap items-end content-end",
+              size3
             )}
           >
             {data.tokens.map((token) => {
               return (
                 <>
-                  <Word token={token} />
+                  <Word token={token} isLarge={isLarge} />
                   <div>{token.whitespace}</div>
                 </>
               );
@@ -78,7 +101,7 @@ export const Sentence = ({
         ) : (
           <h1
             id={"line" + data.id}
-            className={classNames("font-bold text-start", size1)}
+            className={classNames("font-bold text-start", size3)}
           >
             {data.text}
           </h1>
@@ -117,9 +140,13 @@ export const SentenceButton = ({ isActive, data }: SentenceProps) => {
           )}
         >
           <div className="flex items-center">
-            <Badge>{data.id}</Badge>
-            <Sentence isActive={isActive} data={data} className={"grow"} />
-            <Button size="icon" variant="outline" className="h-8 w-8">
+            <Badge className={wordSize.small[0]}>{data.id}</Badge>
+            <Sentence isActive={isActive} data={data} className={"grow ml-2"} />
+            <Button
+              size="icon"
+              variant="outline"
+              className="grow-0 shrink-0 ml-2 h-6 w-6"
+            >
               <MoreVertical className="h-3.5 w-3.5" />
               <span className="sr-only">More</span>
             </Button>
