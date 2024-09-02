@@ -10,6 +10,7 @@ import { isWord } from "@/utils";
 import classNames from "classnames";
 import { useAtomValue, useSetAtom } from "jotai";
 import { MoreVertical } from "lucide-react";
+import React from "react";
 import { useContext, useState, useEffect } from "react";
 
 interface WordProps {
@@ -42,7 +43,7 @@ const Word = ({ token, isLarge: isHuge }: WordProps) => {
   return (
     <div className="font-sans">
       {isWord(token) ? (
-        <button>
+        <div>
           <div
             className={classNames(
               "flex flex-col",
@@ -53,7 +54,7 @@ const Word = ({ token, isLarge: isHuge }: WordProps) => {
             {hiragana && <span className={size1}>{hiragana}</span>}
             <span className={size3}>{token.text}</span>
           </div>
-        </button>
+        </div>
       ) : (
         <span>{token.text}</span>
       )}
@@ -89,12 +90,12 @@ export const Sentence = ({
               size3
             )}
           >
-            {data.tokens.map((token) => {
+            {data.tokens.map((token, i) => {
               return (
-                <>
+                <React.Fragment key={i}>
                   <Word token={token} isLarge={isLarge} />
                   <div>{token.whitespace}</div>
-                </>
+                </React.Fragment>
               );
             })}
           </div>
@@ -131,7 +132,7 @@ export const SentenceButton = ({ isActive, data }: SentenceProps) => {
   return (
     <div className={"box-border line text-start min-w-[150px]"}>
       <div className="flex items-center">
-        <button
+        <div
           onClick={skipToLine}
           className={classNames(
             "grow p-2 rounded-lg",
@@ -151,7 +152,7 @@ export const SentenceButton = ({ isActive, data }: SentenceProps) => {
               <span className="sr-only">More</span>
             </Button>
           </div>
-        </button>
+        </div>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ export const Transcript = () => {
   const [curSentenceId, setCurSentenceId] = useAtom(curSentenceIdAtom);
   const [sentences, setSentences] = useAtom(sentencesAtom);
   const [curAudioId, setCurAudioId] = useAtom(curAudioIdAtom);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isTokenized, setIsTokenized] = useState(false);
 
   const saveToDB = async (data: Sent[]) => {
     console.log("save sents:", data.length);
@@ -42,15 +42,16 @@ export const Transcript = () => {
   };
 
   useEffect(() => {
-    if (!isLoaded) return;
+    setPlayer(null);
 
     var newPlayer = new AudioPlayer({
       url: demoUrl,
       debug: true,
       dispatch: dispatch,
     });
+
     setPlayer(newPlayer);
-  }, [curAudioId, dispatch, isLoaded]);
+  }, [curAudioId]);
 
   // initial demo data if failed to load from db
   useEffect(() => {
@@ -81,7 +82,6 @@ export const Transcript = () => {
           // save to db
           saveToDB(sentencesInitData);
         }
-        setIsLoaded(true);
       })
       .catch((error) => {
         console.error("Failed to load sentences from DB:", error);
@@ -111,8 +111,6 @@ export const Transcript = () => {
 
   // 加载完句子后，开始分词
   useEffect(() => {
-    if (!isLoaded) return;
-
     const handleTokenize = async (sents: Sent[], batch = 100) => {
       const sentenceId2Index: { [key: number]: number } = {};
       sentences.forEach((s, i) => {
@@ -136,7 +134,14 @@ export const Transcript = () => {
         const resp = await getTokenize(curTargetLang, texts);
         handleRespWithNotifySuccess<Tokens>(resp, (data) => {
           for (let i = 0; i < sentIndexes.length; i++) {
-            sentences[sentIndexes[i]].tokens = data[i];
+            // 给每个 token 添加一个唯一的id: {audioId}_{sentenceId}_{tokenIndex}
+            const tokensWithId = data[i].map((t, tokenIdx) => {
+              return {
+                ...t,
+                id: `${curAudioId}_${sentences[sentIndexes[i]].id}_${tokenIdx}`,
+              };
+            });
+            sentences[sentIndexes[i]].tokens = tokensWithId;
             sentences[sentIndexes[i]].isTokenized = true;
           }
           setSentences([...sentences]);
@@ -144,6 +149,7 @@ export const Transcript = () => {
         });
       }
       console.log("end tokenizing");
+      setIsTokenized(true);
     };
 
     db.sents
@@ -154,11 +160,11 @@ export const Transcript = () => {
           handleTokenize(sents);
         }
       });
-  }, [isLoaded, curTargetLang]);
+  }, [curTargetLang]);
 
   return (
     <div className="h-full py-4">
-      <div className="flex flex-col gap-1 h-full overflow-y-auto">
+      <div className="flex flex-col h-full overflow-y-auto">
         {sentences.map((item, i) => (
           <SentenceButton
             key={item.id}

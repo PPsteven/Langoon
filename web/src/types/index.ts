@@ -1,6 +1,7 @@
 import { Resp } from "./resp";
 
 export interface Token {
+  id: string;
   text: string;
   // TODO: add more "AUX"  | "SCONJ" | "INTJ"| "SYM" | "X";} ;
   pos:
@@ -17,8 +18,13 @@ export interface Token {
     | "PUNCT"
     | "CCONJ";
   whitespace: string;
-  meaning?: string;
 }
+
+export type Word = Token & {
+  audioId: number;
+  sentenceId: number;
+  meaning: string;
+};
 
 export type Tokens = Token[][];
 

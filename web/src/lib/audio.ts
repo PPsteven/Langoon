@@ -25,6 +25,7 @@ export class AudioPlayer {
   sprite?: HowlOptions["sprite"];
   sound?: Howl;
   interval: number = 0;
+  version: number;
 
   // state
   pos: number = 0;
@@ -33,6 +34,7 @@ export class AudioPlayer {
   onstep?: (e: { seek: number; percent: number; duration: number }) => void;
 
   constructor(options: AudioOptions) {
+    this.version = Date.now();
     this.sprite = options.sprite;
     this.url = options.url;
     this.debug = options.debug || false;
@@ -73,6 +75,7 @@ export class AudioPlayer {
     this.sound?.pause();
   }
   seek(seek: number) {
+    this.dispatch({ type: "seek", payload: seek });
     this.stopInterval();
     this.sound?.seek(seek);
     this.resetInterval();

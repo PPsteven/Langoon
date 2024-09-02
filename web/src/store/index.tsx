@@ -25,7 +25,7 @@ export const AudioContext = createContext<{
   state: AudioState;
   dispatch: Dispatch;
   player: AudioPlayer | null;
-  setPlayer: (player: AudioPlayer) => void;
+  setPlayer: (player: AudioPlayer | null) => void;
   kuroshiro: Kuroshiro | null;
 } | null>(null);
 
@@ -42,7 +42,6 @@ export const AudioReducer = (draft: AudioState, action: AudioAction) => {
       draft.status = "pause";
       break;
     case "seek":
-      draft.status = "play";
       draft.seek = action.payload;
       draft.percent = draft.percent / draft.duration;
       break;
