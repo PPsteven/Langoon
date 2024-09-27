@@ -1,11 +1,12 @@
-package transcript
+package textconvertor
 
 import (
 	"bytes"
-	"github.com/asticode/go-astisub"
-	"go-server-template/internal/model"
-	"path/filepath"
 	"strings"
+
+	"github.com/asticode/go-astisub"
+
+	"go-server-template/internal/model"
 )
 
 type SubConvertor struct {
@@ -15,7 +16,7 @@ type SubConvertor struct {
 func (s *SubConvertor) Convert() (lines []*model.Line, err error) {
 	var sub *astisub.Subtitles
 
-	switch filepath.Ext(strings.ToLower(s.fileName)) {
+	switch s.ext {
 	case ".srt":
 		sub, err = astisub.ReadFromSRT(bytes.NewBuffer(s.buf))
 	case ".ssa", ".ass":
@@ -31,31 +32,38 @@ func (s *SubConvertor) Convert() (lines []*model.Line, err error) {
 	}
 
 	lines = make([]*model.Line, 0, len(sub.Items))
-	var s1, s2 string
-	for i, item := range sub.Items {
-		s1, s2 = getTranslation(item.String())
+	for _, item := range sub.Items {
 		lines = append(lines, &model.Line{
-			ID:          i,
-			Raw:         s1,
-			Translation: s2,
-			Start:       int64(item.StartAt),
-			End:         int64(item.EndAt),
+			ID:    item.Index,
+			Lines: getSplitLines(item.Lines),
+			Start: int64(item.StartAt),
+			End:   int64(item.EndAt),
 		})
 	}
 	return lines, nil
 }
 
-func getTranslation(s string) (raw string, translation string) {
-	defer func() {
-		raw = strings.TrimSpace(raw)
-		translation = strings.TrimSpace(translation)
-	}()
-
-	splits := strings.SplitN(s, "\\N", 2)
-	if len(splits) == 2 {
-		return splits[1], splits[0]
-	} else if len(splits) == 1 {
-		return splits[0], ""
+func getSplitLines(lines []astisub.Line) (splitLines []string) {
+	splitLines = make([]string, 0)
+	for _, line := range lines {
+		if len(line.Items) > 0 {
+			splitLines = append(splitLines, strings.TrimSpace(line.Items[0].Text))
+		}
 	}
-	return "", ""
+
+	if len(splitLines) == 0 || len(splitLines) >= 2 {
+		return
+	}
+
+	// 字幕格式不标准，尝试用字符串切分
+	var sep string
+	seps := []string{"\\N", "\n"}
+
+	for _, sep = range seps {
+		if strings.Contains(splitLines[0], sep) {
+			break
+		}
+	}
+
+	return strings.SplitN(splitLines[0], sep, 2)
 }

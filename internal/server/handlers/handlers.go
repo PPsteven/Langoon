@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"go-server-template/internal/server/handlers/api/audio"
 	"go-server-template/internal/server/handlers/api/nlp"
 	"go-server-template/internal/server/handlers/api/translate"
 	"go-server-template/internal/server/handlers/api/user"
@@ -22,4 +23,8 @@ func NLP() nlp.Handler {
 
 func Word() word.Handler {
 	return word.New(service.Get())
+}
+
+func Audio() audio.Handler {
+	return audio.New(service.Get())
 }

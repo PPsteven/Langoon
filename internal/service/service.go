@@ -17,6 +17,8 @@ var _ Service = (*service)(nil)
 type Service interface {
 	User() UserService
 
+	Audio() AudioService
+
 	i()
 }
 type service struct {
@@ -25,6 +27,10 @@ type service struct {
 
 func (s *service) User() UserService {
 	return newUser(s)
+}
+
+func (s *service) Audio() AudioService {
+	return newAudio(s)
 }
 
 func (s *service) i() {}

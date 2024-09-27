@@ -32,9 +32,11 @@ type Transcript struct {
 }
 
 type Line struct {
-	ID          int    `json:"id"`
-	Raw         string `json:"raw"`
-	Translation string `json:"translation"`
-	Start       int64  `json:"start"`
-	End         int64  `json:"end"`
+	ID     int      `json:"id"`
+	Lines  []string `json:"lines"`
+	Source string   `json:"source"`
+	Target string   `json:"targer"`
+	Start  int64    `json:"start"`
+	End    int64    `json:"end"`
+	Tokens []*Token `json:"tokens"`
 }

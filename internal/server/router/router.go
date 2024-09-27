@@ -21,6 +21,11 @@ func Load(e *gin.Engine, middlewares ...gin.HandlerFunc) {
 				nlp.POST("/sentences", handlers.NLP().GetSentences)
 				nlp.POST("/tokenize", handlers.NLP().Tokenize)
 			}
+
+			audio := api.Group("/audio")
+			audio.POST("/upload", handlers.Audio().Upload)
+			audio.GET("/:uid", handlers.Audio().GetMeta)
+			audio.PATCH("/:uid", handlers.Audio().Generate)
 		}
 	}
 }

@@ -10,11 +10,11 @@ import (
 )
 
 const (
-	pathNLPtokenize  = "http://127.0.0.1:8000/tokenize"
-	pathNLPsentences = "http://127.0.0.1:8000/sentences"
+	pathNLPtokenize  = "http://127.0.0.1:8180/tokenize"
+	pathNLPsentences = "http://127.0.0.1:8180/sentences"
 )
 
-func Tokenize(slc model.LanguageCode, text []string) (tokens [][]model.Token, err error) {
+func Tokenize(slc model.LanguageCode, text []string) (tokens [][]*model.Token, err error) {
 	path := fmt.Sprint(pathNLPtokenize)
 
 	body, _ := json.Marshal(map[string]interface{}{
