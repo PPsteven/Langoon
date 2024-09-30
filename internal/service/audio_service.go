@@ -43,7 +43,7 @@ func (s *audioService) Create(ctx context.Context, title, audio string, audioTyp
 	linesByte, err := json.Marshal(lines)
 
 	uid = uuid.New().String()
-	return uid, db.CreateAudio(ctx, &model.Audio{UID: uid, Title: title, Audio: audio, AudioType: string(audioType), Text: text,
+	return uid, db.CreateAudio(ctx, &model.Audio{UID: uid, Title: title, AudioUrl: audio, AudioType: string(audioType), Text: text,
 		TextType: string(textType), Lines: string(linesByte)})
 }
 
@@ -52,7 +52,7 @@ func (s *audioService) Get(ctx context.Context, uid string) (audio *model.Audio,
 }
 
 func (s *audioService) Generate(ctx context.Context, sourceLang model.LanguageCode, sourceLangIdx int,
-	targerLang model.LanguageCode, targerLangIdx int, audio *model.Audio) (err error) {
+	targetLang model.LanguageCode, targetLangIdx int, audio *model.Audio) (err error) {
 
 	tx := s.db.WithContext(ctx).Begin()
 	defer tx.Rollback()
@@ -62,7 +62,7 @@ func (s *audioService) Generate(ctx context.Context, sourceLang model.LanguageCo
 		return err
 	}
 
-	err = s.audioGenerate(ctx, tx, sourceLang, sourceLangIdx, targerLang, targerLangIdx, audio)
+	err = s.audioGenerate(ctx, tx, sourceLang, sourceLangIdx, targetLang, targetLangIdx, audio)
 	if err != nil {
 		return err
 	}

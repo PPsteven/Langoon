@@ -35,7 +35,7 @@ type Line struct {
 	ID     int      `json:"id"`
 	Lines  []string `json:"lines"`
 	Source string   `json:"source"`
-	Target string   `json:"targer"`
+	Target string   `json:"target"`
 	Start  int64    `json:"start"`
 	End    int64    `json:"end"`
 	Tokens []*Token `json:"tokens"`

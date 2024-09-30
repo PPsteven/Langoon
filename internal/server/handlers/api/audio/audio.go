@@ -90,11 +90,11 @@ func validateUploadRequest(req UploadReq) error {
 }
 
 type GetMetaResp struct {
-	ID    uint          `json:"id" gorm:"primaryKey" example:"1"`
-	UID   string        `json:"uid" gorm:"uniqueIndex" example:"c7b3b1b0-4b7b-4b7b-8b7b-7b7b7b7b7b7b"`
-	Title string        `json:"title" binding:"required" example:"My Audio"`
-	Audio string        `json:"audio" binding:"required" example:"https://example.com/audio.mp3"`
-	Lines []*model.Line `json:"lines" example:"[{\"start\":0,\"end\":1,\"text\":\"Hello, world!\"}]"`
+	ID       uint          `json:"id" gorm:"primaryKey" example:"1"`
+	UID      string        `json:"uid" gorm:"uniqueIndex" example:"c7b3b1b0-4b7b-4b7b-8b7b-7b7b7b7b7b7b"`
+	Title    string        `json:"title" binding:"required" example:"My Audio"`
+	AudioUrl string        `json:"audio_url" binding:"required" example:"https://example.com/audio.mp3"`
+	Lines    []*model.Line `json:"lines" example:"[{\"start\":0,\"end\":1,\"text\":\"Hello, world!\"}]"`
 }
 
 func (h *handler) GetMeta(c *gin.Context) {
@@ -119,11 +119,11 @@ func (h *handler) GetMeta(c *gin.Context) {
 	}
 
 	response.Success(c, &GetMetaResp{
-		ID:    audio.ID,
-		UID:   audio.UID,
-		Title: audio.Title,
-		Audio: audio.Audio,
-		Lines: lines,
+		ID:       audio.ID,
+		UID:      audio.UID,
+		Title:    audio.Title,
+		AudioUrl: audio.AudioUrl,
+		Lines:    lines,
 	})
 }
 
